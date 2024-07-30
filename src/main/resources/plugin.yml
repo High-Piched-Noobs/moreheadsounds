@@ -3,3 +3,4 @@ name: MoreHeadSounds
 version: 1.0
 authors: [thojo0, PYZ]
 description: Allows the use of player heads for minecraft sounds
+api-version: 1.20
