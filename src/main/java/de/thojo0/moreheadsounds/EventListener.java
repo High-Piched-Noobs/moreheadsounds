@@ -101,7 +101,10 @@ public class EventListener implements Listener {
         Skull skull = (Skull) usedHead.getState();
         String[] textureUrl = skull.getOwnerProfile().getTextures().getSkin().toString().split("/");
         String textureHash = textureUrl[textureUrl.length - 1];
-
+        // Check if textureHash is defined
+        if (!textureToSounds.containsKey(textureHash)) {
+            return;
+        };
         // Get the possible sounds for the texture hash
         ArrayList<NamespacedKey> possibleSounds = textureToSounds.get(textureHash);
         // Set the note block sound based on the note value
