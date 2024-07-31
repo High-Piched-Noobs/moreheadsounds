@@ -11,3 +11,6 @@ commands:
 permissions:
   moreheadsounds.reload:
     description: Allows reloading the configuration
+  moreheadsounds.clearItem:
+    description: Allows clearing the sound from the currently holding player head
+    default: true
