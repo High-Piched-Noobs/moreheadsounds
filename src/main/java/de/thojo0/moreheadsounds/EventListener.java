@@ -27,12 +27,17 @@ public class EventListener implements Listener {
     // Mapping from texture hashes to lists of NamespacedKeys for sounds
     private HashMap<String, ArrayList<NamespacedKey>> textureToSounds = new HashMap<>();
 
+    EventListener(FileConfiguration config) {
+        reloadConfig(config);
+    }
+
     /**
-     * Constructor: initializes the textureToSounds map based on the configuration
+     * initializes the textureToSounds map based on the configuration
      * 
      * @param config The FileConfiguration object containing sound mappings.
      */
-    EventListener(FileConfiguration config) {
+    public void reloadConfig(FileConfiguration config) {
+        textureToSounds.clear();
         // Get all configuration values
         Map<String, Object> configValues = config.getValues(false);
         // Iterate over all available sounds

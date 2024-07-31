@@ -1,6 +1,13 @@
 main: de.thojo0.moreheadsounds.App
 name: MoreHeadSounds
-version: 1.0.1
+version: 1.1
 authors: [thojo0, PYZ]
 description: Allows the use of player heads for minecraft sounds
 api-version: 1.20
+commands:
+  moreheadsounds:
+    description: The main command for MoreHeadSounds
+    usage: /<command>
+permissions:
+  moreheadsounds.reload:
+    description: Allows reloading the configuration
