@@ -93,9 +93,9 @@ d6dd5e6addb56acbc694ea4ba5923b1b25688178feffa72290299e2505c97281:
 d710f9aa326c7205038392aeb12f45ce22cf6a1336b82129668bea1fc46d4285:
   include:
     - entity.bee.
-53d18dad0bd90f02ac08754a75358b1c27da579b3ca35b69e6bb10a7a5c2dbda:
+53d18dad0bd90f02ac08754a75358b1c27da579b3ca35b69e6bb10a7a5c2dbda: #cave_spider
   include:
-    - entity.cave_spider.
+    - entity.spider.
 1415d2c543e34bb88ede94d79b9427691fc9be72daad8831a9ef297180546e18:
   include:
     - entity.dolphin.
@@ -219,6 +219,7 @@ fb552c90f212e855d12255d5cd62ed38b9cd7e30e73f0ea779d1764330e69264:
 ffcdae586b52403b92b1857ee4331bac636af08bab92ba5750a54a83331a6353:
   include:
     - entity.ender_dragon.
+    - entity.dragon_fireball.
 b95d875140b99235ec5e4486242a70da881a7c183b650ceafae0084bceb66182:
   include:
     - entity.wither.
@@ -246,3 +247,153 @@ a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c:
 9852b33ba294f560090752d113fe728cbc7dd042029a38d5382d65a2146068b7:
   include:
     - entity.armadillo.
+
+# MHF Heads
+83cee5ca6afcdb171285aa00e8049c297b2dbeba0efb8ff970a5677a1b644032: #MHF_Alex
+  include:
+    - entity.player.
+# fe3d755cecbb13a39e8e9354823a9a02a01dce0aca68ffd42e3ea9a9d29e2df2: #MHF_ArrowDown
+# f7aacad193e2226971ed95302dba433438be4644fbab5ebf818054061667fbe2: #MHF_ArrowLeft
+# d34ef0638537222b20f480694dadc0f85fbe0759d581aa7fcdf2e43139377158: #MHF_ArrowRight
+# a156b31cbf8f774547dc3f9713a770ecc5c727d967cb0093f26546b920457387: #MHF_ArrowUp
+d06e342f90ec538aaa1552b224f264a040840902e126d91ece6139aa5b3c7cc3: #MHF_Blaze
+  include:
+    - entity.blaze.
+# 40d4c8e90edef8cde2b89c7b1c65ba02ec3341bad115e00de2199105ff173d94: #MHF_Cactus
+ec241a597c285e104c271196d785db4cd0110a40c8f8e5d354c5644159567c9d: #MHF_Cake
+  include:
+    - block.cake.
+f9136514f342e7c5208a1422506a866158ef84d2b249220139e8bf6032e193: #MHF_Cake
+  include:
+    - block.cake.
+77b07063a6874fa3e22548e02062bd733c25885929809624180aebb851557f6a: #MHF_CaveSpider
+  include:
+    - entity.spider.
+6f68d509b5d1669b971dd1d4df2e47e19bcb1b33bf1a7ff1dda29bfc6f9ebf: #MHF_Chest
+  include:
+    - block.chest.
+758305e527fcf08525fdff07e4cd6e79774acdd426cc27327d45df8a5ff86419: #MHF_Chest
+  include:
+    - block.chest.
+916b8e98389c541bb36453850bcbd1f7bc5a57da62dcc505060409737ec5b72a: #MHF_Chicken
+  include:
+    - entity.chicken.
+# 32c62fd8e474d09940604f82712a44abb249d63aff87f998374ca849ab17412: #MHF_CoconutB
+# 7b3fd7d375bde51828c6f6ec888b2ea86f23fa348db7bdde03f7e007c3c2400b: #MHF_CoconutB
+# bafb834fac9d1ff2a8061ce917b50eb89ced932fdf50e37b971c75bc8d139f8a: #MHF_CoconutG
+d0e4e6fbf5f3dcf94422a1f319448f152369d179dbfbcdf00e5bfe8495fa977: #MHF_Cow
+  include:
+    - entity.cow.
+ba5e95735a3f3772b1b485e1502807ae396a72c61bfd36ab41fa71bec2f64aa2: #MHF_Creeper
+  include:
+    - entity.creeper.
+1b09a3752510e914b0bdc9096b392bb359f7a8e8a9566a02e7f66faff8d6f89e: #MHF_Enderman
+  include:
+    - entity.enderman.
+1730127e3ac7677122422df0028d9e7368bd157738c8c3cddecc502e896be01c: #MHF_Endermite
+  include:
+    - entity.endermite.
+# 40b05e699d28b3a278a92d169dca9d57c0791d07994d82de3f9ed4a48afe0e1d: #MHF_Exclamation
+4a4e42eb15a08813a6a6f61f10aa288019fa0fae106a2953ddb46f77ee2d77f: #MHF_Ghast
+  include:
+    - entity.ghast.
+1c6cd7202c34e78f3073090349f7d973b288af5e5b7334dd249010b3f27078f9: #MHF_Golem
+  include:
+    - entity.iron_golem.
+fa115bac9ee11cfaf9c9d623a3823b21cfbddc1b3734f71cf67fe2ac0aed175c: #MHF_Guardian
+  include:
+    - entity.guardian.
+# 2c65ed2829c83e119a80dfb22216443e878ef10649c4a354f74bf45ad06bc1a7: #MHF_Herobrine
+d90d61e8ce9511a0a2b5ea2742cb1ef36131380ed4129e1b163ce8ff000de8ea: #MHF_LavaSlime
+  include:
+    - entity.magma_cube.
+# 8092d760c453625594662c9fc868152a01a1f6f8d6137fb868da5a95bbd1f58: #MHF_Melon
+123cfc5582454fcf9906f841fda2cc6ae896cf455821c4ada1998de70877cc86: #MHF_MushroomCow
+  include:
+    - entity.mooshroom.
+ebe1da01f174d46239166dc5fb4a0af88b9ee38b7da918f33d838bca85ba7f3c: #MHF_OakLog
+  include:
+    - block.wood.
+ffe5109c86fe6de8eb8afe32f0496a844dd655e4d4a39ef7b0fb61791848a5da: #MHF_OakLog
+  include:
+    - block.wood.
+118b6b79783368dfe0042985110da366f9c788b45097a3ea6d0d9a753e9f42c6: #MHF_Ocelot
+  include:
+    - entity.ocelot.
+a562a37b871f964bfc3e1311ea672aaa03984a5dc472154a34dc25af157e382b: #MHF_Pig
+  include:
+    - entity.pig.
+# 74e9c6e98582ffd8ff8feb3322cd1849c43fb16b158abb11ca7b42eda7743eb: #MHF_PigZombie
+# 916d167c5744ed14ebc02f447f32614059362b7d2ecb808ff06165d2c343bef2: #MHF_PigZombie
+# 2e10ac999703c735bf7ba6da63f9842d415c5bde07a742f96f3060e11ccfa6c6: #MHF_Present1
+# 64abe81e6f4961e0f6bd82f2d4135b6b5fc845739e71cfe3b8943531d921e: #MHF_Present1
+# 407c0d34f90548abf94040e5167c1e07c3427b920f66680d7356e23e11c1a77f: #MHF_Present2
+# bd7a9f6ed08dd217fdf09f4652bf6b7af621e1d5f8963605349da73998a443: #MHF_Present2
+b162d72d8d576d9bbb81c9aedc690617416dedc95ccf17f794580ca674942a65: #MHF_Pumpkin
+  include:
+    - block.pumpkin.
+# d34e063cafb467a5c8de43ec78619399f369f4a52434da8017a983cdd92516a0: #MHF_Question
+65fa1ec985f1de430ad28cd592337ee5ee261accd27b82162d178d8381ecadb2: #MHF_Rabbit
+  include:
+    - entity.rabbit.
+7ca38ccf417e99ca9d47eeb15a8a30edb1507aa52b678c220c717c474aa6fe3e: #MHF_Sheep
+  include:
+    - entity.sheep.
+5080da9d2f89c3c408217b0c221309854b3d3510d238eb06d35fc1a541bb40d8: #MHF_Shulker
+  include:
+    - entity.shulker.
+92ec2c3cb95ab77f7a60fb4d160bced4b879329b62663d7a9860642e588ab210: #MHF_Silverfish
+  include:
+    - entity.silverfish.
+22795c3c6f36d67decf9a3195e128040bec5226b055f2b16d46fa19a9180e023: #MHF_Skeleton
+  include:
+    - entity.skeleton.
+86c27b013f1bf3344869e81e5c610027bc45ec5b79514fdc96e01df1b7e3a387: #MHF_Slime
+  include:
+    - entity.slime.
+f19c0bf9cecae9c7d3ee05125b0a92e5ba48e90680e5997053cb5c07d28a0d9c: #MHF_SnowGolem
+  include:
+    - entity.snow_golem.
+f61a49541a836aa8f4f76e0d4cb2ff04888c62f9411ea10cbacf1f2a54424240: #MHF_Spider
+  include:
+    - entity.spider.
+5e89101d5cc74aa458021a060f6289a51a35a7d34d8caddfc3cdf3b2c9a071a: #MHF_Squid
+  include:
+    - entity.squid.
+d5c4ee5ce20aed9e33e866c66caa37178606234b3721084bf01d13320fb2eb3f: #MHF_Steve
+  include:
+    - entity.player.
+728a1815689d7194cf7db061b59f63106264b51387976a7fb74ab79b5641: #MHF_TNT
+  include:
+    - entity.tnt.
+    - entity.generic.explode
+f92408fe8d0a3ef5531065e9f566c31aa6eb37484031a46e4466615daf64f705: #MHF_TNT
+  include:
+    - entity.tnt.
+    - entity.generic.explode
+dc75cd6f9c713e9bf43fea963990d142fc0d252974ebe04b2d882166cbb6d294: #MHF_TNT2
+  include:
+    - entity.tnt.
+    - entity.generic.explode
+eb994b41f07f87b328186acfcbdabc699d5b1847fabb2e49d5abc27865143a4e: #MHF_TNT2
+  include:
+    - entity.tnt.
+    - entity.generic.explode
+46cb494e7e4dcb3e7b3286cda9097b38cc90fc7cfad58368183b0b86b0e6b47f: #MHF_Vex
+  include:
+    - entity.vex.
+b4bd832813ac38e68648938d7a32f6ba29801aaf317404367f214b78b4d4754c: #MHF_Villager
+  include:
+    - entity.villager.
+ea15d05d0a868968c668b5d86c4083053ebe9fdea9ce4aa1315035d3ba8843d: #MHF_Wither
+  include:
+    - entity.wither.
+696a537a813a1c17ab4c90d212b80d03b1baf1e3cf172f5ffe02afd0532fccef: #MHF_Wolf
+  include:
+    - entity.wolf.
+ba96e9d76bed30090ce6e2d8425996594eec6d68ac88cf07356e9814834243ec: #MHF_WSkeleton
+  include:
+    - entity.wither_skeleton.
+d97e4259379a06f24843c1bb42f2df35c13f801ad079f715bded488db8f57c3: #MHF_Zombie
+  include:
+    - entity.zombie.
