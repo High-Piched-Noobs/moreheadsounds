@@ -5,7 +5,7 @@
 
   <groupId>de.thojo0</groupId>
   <artifactId>moreheadsounds</artifactId>
-  <version>1.2</version>
+  <version>1.2.1</version>
 
   <name>moreheadsounds</name>
   <!-- FIXME change it to the project's website 
@@ -44,5 +44,57 @@
         </includes>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>install</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <failOnError>false</failOnError>
+              <filesets>
+                <fileset>
+                  <directory>server/plugins</directory>
+                  <followSymlinks>false</followSymlinks>
+                  <useDefaultExcludes>false</useDefaultExcludes>
+                  <includes>
+                    <include>${project.name}-*.${project.packaging}</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>copy-files-on-build</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/server/plugins</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}</directory>
+                  <include>${project.name}-${project.version}.${project.packaging}</include>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
