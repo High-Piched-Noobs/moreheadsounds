@@ -52,4 +52,4 @@ The plugin's configuration file allows server administrators to specify which so
 
 ## Support
 
-For support and more information, visit the plugin's official page or contact the author.
+For support and more information, visit the plugin's official page or contact the authors.
