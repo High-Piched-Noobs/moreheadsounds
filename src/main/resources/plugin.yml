@@ -15,4 +15,4 @@ permissions:
     description: Allows clearing the sound of the currently holding player head
     default: true
   moreheadsounds.getHash:
-    description: Allows reading the texture hash of the currently holding player head
+    description: Allows reading the texture hash of the currently holding player head or a specific block
