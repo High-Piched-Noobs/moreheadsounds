@@ -16,7 +16,6 @@ MoreHeadSounds is a Minecraft plugin that enhances the gameplay experience by al
   - **/moreheadsounds clearItem:** Clear the custom sound from the player head you are holding.
   - **/moreheadsounds getHash:** Retrieve the texture hash of the player head you are holding or looking at, useful for debugging and configuration.
 - **Tab Completion:** Provides convenient tab completion for commands and coordinates, making it easier to use the plugin's features.
-- **Event Handling:** Automatically handles events such as player interactions with note blocks and block drops to ensure the custom sounds are correctly applied.
 
 ## Commands and Permissions
 
