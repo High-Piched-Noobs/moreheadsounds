@@ -1,6 +1,7 @@
 # MoreHeadSounds
 
-**Latest Version:** (Placeholder für Latest Version Badge!)
+![GitHub Release](https://img.shields.io/github/v/release/High-Piched-Noobs/moreheadsounds?display_name=release) ![GitHub License](https://img.shields.io/github/license/High-Piched-Noobs/moreheadsounds)
+
 
 **Authors:** thojo0 & PYZR
 
