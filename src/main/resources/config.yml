@@ -262,6 +262,9 @@ a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c:
 d06e342f90ec538aaa1552b224f264a040840902e126d91ece6139aa5b3c7cc3: #MHF_Blaze
   include:
     - entity.blaze.
+b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0: #MHF_Blaze
+  include:
+    - entity.blaze.
 # 40d4c8e90edef8cde2b89c7b1c65ba02ec3341bad115e00de2199105ff173d94: #MHF_Cactus
 ec241a597c285e104c271196d785db4cd0110a40c8f8e5d354c5644159567c9d: #MHF_Cake
   include:
