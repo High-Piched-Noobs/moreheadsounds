@@ -8,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,9 +31,6 @@ public class App extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(eventListener, this);
-        PluginCommand command = getCommand(getName().toLowerCase());
-        command.setExecutor(this);
-        command.setTabCompleter(this);
         getLogger().info(getName() + " activated!");
     }
 
@@ -51,10 +47,9 @@ public class App extends JavaPlugin {
 
         if (args.length == 0) {
             sender.sendMessage(customPrefixFail + "You need to type something after /" + label);
-
             return true;
         }
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
             case "reload":
                 if (!sender.hasPermission(command.getName() + ".reload")) {
                     sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
@@ -65,7 +60,7 @@ public class App extends JavaPlugin {
                 runReload(sender);
                 break;
 
-            case "clearItem":
+            case "clearitem":
                 if (!sender.hasPermission(command.getName() + ".clearItem")) {
                     sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
                             .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)
@@ -81,7 +76,7 @@ public class App extends JavaPlugin {
                 runClearItem(player);
                 break;
 
-            case "getHash":
+            case "gethash":
                 if (!sender.hasPermission(command.getName() + ".getHash")) {
                     sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
                             .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)

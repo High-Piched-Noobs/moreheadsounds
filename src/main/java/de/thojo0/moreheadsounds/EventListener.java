@@ -1,9 +1,11 @@
 package de.thojo0.moreheadsounds;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,7 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Skull;
 import org.bukkit.block.data.type.NoteBlock;
-import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -25,7 +27,7 @@ import org.bukkit.profile.PlayerProfile;
 
 public class EventListener implements Listener {
     // Mapping from texture hashes to lists of NamespacedKeys for sounds
-    private HashMap<String, ArrayList<NamespacedKey>> textureToSounds = new HashMap<>();
+    private final Map<String, ArrayList<NamespacedKey>> textureToSounds = new HashMap<>();
 
     EventListener(FileConfiguration config) {
         reloadConfig(config);
@@ -39,7 +41,7 @@ public class EventListener implements Listener {
     public void reloadConfig(FileConfiguration config) {
         textureToSounds.clear();
         // Get all configuration values
-        Map<String, Object> configValues = config.getValues(false);
+        final Map<String, Object> configValues = config.getValues(false);
         // Iterate over all available sounds
         for (Sound sound : Sound.values()) {
             // Get the NamespacedKey for the current sound
@@ -47,7 +49,7 @@ public class EventListener implements Listener {
             // Iterate over the configuration values
             configValues.forEach((textureHash, c) -> {
                 // Get the list of excluded sounds for the current texture
-                List<String> exclude = ((MemorySection) c).getStringList("exclude");
+                final List<String> exclude = ((ConfigurationSection) c).getStringList("exclude");
                 for (String ex : exclude) {
                     // Split the exclude string into namespace and key
                     String[] splitEx = ex.split(":");
@@ -62,7 +64,7 @@ public class EventListener implements Listener {
                         return;
                 }
                 // Get the list of included sounds for the current texture
-                List<String> include = ((MemorySection) c).getStringList("include");
+                final List<String> include = ((ConfigurationSection) c).getStringList("include");
                 for (String in : include) {
                     // Split the include string into namespace and key
                     String[] splitIn = in.split(":");
@@ -86,32 +88,28 @@ public class EventListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         // Get the block that was clicked
-        Block block = event.getClickedBlock();
+        final Block block = event.getClickedBlock();
         // Check if the action was a right-click on a note block
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK || block.getType() != Material.NOTE_BLOCK)
             return;
         // Get the data for the note block
-        NoteBlock blockdata = (NoteBlock) block.getBlockData();
+        final NoteBlock blockdata = (NoteBlock) block.getBlockData();
         // Check if the note block is associated with a custom head
         if (blockdata.getInstrument() != Instrument.CUSTOM_HEAD)
             return;
         // Get the block above the note block
-        Block usedHead = block.getRelative(BlockFace.UP);
+        final Block usedHead = block.getRelative(BlockFace.UP);
         // Check if the block above is a player head
         if (usedHead.getType() != Material.PLAYER_HEAD)
             return;
         // Get the skull data and texture hash for the player head
-        Skull skull = (Skull) usedHead.getState();
-        PlayerProfile owner = skull.getOwnerProfile();
-        // Check owner exist
-        if (owner == null)
-            return;
-        String textureHash = getTextureHash(owner);
+        final Skull skull = (Skull) usedHead.getState();
+        final String textureHash = getTextureHash(skull.getOwnerProfile());
         // Check if textureHash is defined
-        if (!textureToSounds.containsKey(textureHash))
+        if (textureHash == null || !textureToSounds.containsKey(textureHash))
             return;
         // Get the possible sounds for the texture hash
-        ArrayList<NamespacedKey> possibleSounds = textureToSounds.get(textureHash);
+        final List<NamespacedKey> possibleSounds = textureToSounds.get(textureHash);
         // Set the note block sound based on the note value
         skull.setNoteBlockSound(possibleSounds.get(((blockdata.getNote().getId() + 1) % 25) % possibleSounds.size()));
         // Update the skull without sending updates to clients or applying physics
@@ -127,20 +125,17 @@ public class EventListener implements Listener {
                 continue;
 
             // Get the metadata for the player head and its texture hash
-            SkullMeta metaData = (SkullMeta) item.getItemStack().getItemMeta();
+            final SkullMeta metaData = (SkullMeta) item.getItemStack().getItemMeta();
 
-            PlayerProfile owner = metaData.getOwnerProfile();
-            // Check owner exist
-            if (owner == null) {
-                // Try again from block instead of item
-                owner = ((Skull) event.getBlockState()).getOwnerProfile();
-                if (owner == null)
-                    continue;
-            }
-            String textureHash = getTextureHash(owner);
+            // Get the textureHash from the item
+            String textureHash = getTextureHash(metaData.getOwnerProfile());
+            // Try again from block
+            if (textureHash == null)
+                textureHash = getTextureHash(((Skull) event.getBlockState()).getOwnerProfile());
+
             // If the texture hash is in the textureToSounds map, remove the sound from the
             // metadata
-            if (textureToSounds.containsKey(textureHash)) {
+            if (textureHash != null && textureToSounds.containsKey(textureHash)) {
                 metaData.setNoteBlockSound(null);
                 item.getItemStack().setItemMeta(metaData);
             }
@@ -149,7 +144,12 @@ public class EventListener implements Listener {
 
     // Extracts the texture hash from the player head's skin URL
     public static String getTextureHash(PlayerProfile owner) {
-        String[] textureUrl = owner.getTextures().getSkin().toString().split("/");
+        if (owner == null)
+            return null;
+        final URL skin = owner.getTextures().getSkin();
+        if (skin == null)
+            return null;
+        final String[] textureUrl = skin.toExternalForm().split("/");
         return textureUrl[textureUrl.length - 1];
     }
 }
