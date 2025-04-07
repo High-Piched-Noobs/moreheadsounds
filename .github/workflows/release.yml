@@ -15,18 +15,18 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      
+
       # This step changes the version in your pom.xml to match the release tag
       # This change only happens in the workflow and is not committed to your repository.
       # You could set the version in your repository to something like `0.0.0-SNAPSHOT` and
       # it will always be overwritten to the correct version here when a release is created.
       - name: Set maven project ver
         run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
-      
+
       # This step compiles your Maven project to a `.jar`
       - name: Build and package Maven project
         run: mvn -B package
-        
+
       # An optional step to also upload the `.jar` to the GitHub release assets
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
@@ -35,13 +35,21 @@ jobs:
           args: target/moreheadsounds-${{ github.event.release.tag_name }}.jar application/java-archive
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      
+
       # Upload the .jar to Modrinth
       - name: Upload to Modrinth
-        uses: cloudnode-pro/modrinth-publish@1.0.0
+        uses: cloudnode-pro/modrinth-publish@v2
         with:
           token: '${{ secrets.MODRINTH_TOKEN }}'
           project: DL9cWKdP
-          file: 'target/moreheadsounds-${{ github.event.release.tag_name }}.jar'
+          name: '${{ github.event.release.tag_name }}'
+          version: '${{ github.event.release.tag_name }}'
           changelog: '${{ github.event.release.body }}'
-          loaders: 'paper, purpur, spigot'
+          loaders: |-
+            paper
+            purpur
+            spigot
+          game-versions: |-
+            1.21.x
+            1.20.x
+          files: 'target/moreheadsounds-${{ github.event.release.tag_name }}.jar'
