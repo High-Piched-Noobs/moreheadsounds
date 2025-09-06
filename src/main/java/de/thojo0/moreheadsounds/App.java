@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.profile.PlayerProfile;
 
-import net.md_5.bungee.api.ChatColor;
+import de.thojo0.moreheadsounds.CommandUtils.Failed;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -22,8 +22,13 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class App extends JavaPlugin {
-    public String customPrefix = "§a[§e" + getName() + "§a] ";
-    public String customPrefixFail = "§c[§7" + getName() + "§c] ";
+    public static String customPrefix;
+    public static String customPrefixFail;
+
+    {
+        customPrefix = "§a[§e" + getName() + "§a] ";
+        customPrefixFail = "§c[§7" + getName() + "§c] ";
+    }
 
     private final EventListener eventListener = new EventListener(getConfig());
 
@@ -41,80 +46,59 @@ public class App extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = null;
-        if (sender instanceof Player)
-            player = (Player) sender;
+        final CommandUtils utils = new CommandUtils(sender, command);
+        try {
+            utils.checkArgs(args, 1, label);
+            switch (args[0].toLowerCase()) {
+                case "config":
+                    utils.checkPermission("config");
+                    utils.checkArgs(args, 2, label + " config");
+                    switch (args[1].toLowerCase()) {
+                        case "reload":
+                            runReload(sender);
+                            break;
 
-        if (args.length == 0) {
-            sender.sendMessage(customPrefixFail + "You need to type something after /" + label);
-            return true;
-        }
-        switch (args[0].toLowerCase()) {
-            case "reload":
-                if (!sender.hasPermission(command.getName() + ".reload")) {
-                    sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                runReload(sender);
-                break;
+                        case "add":
+                            break;
 
-            case "clearitem":
-                if (!sender.hasPermission(command.getName() + ".clearItem")) {
-                    sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                if (player == null) {
-                    sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("permissions.requires.player")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                runClearItem(player);
-                break;
+                        case "remove":
+                            break;
 
-            case "gethash":
-                if (!sender.hasPermission(command.getName() + ".getHash")) {
-                    sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                if (player == null) {
-                    sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("permissions.requires.player")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                if (args.length == 1) {
-                    runGetHash(player);
+                        case "show":
+                            break;
+
+                        default:
+                            utils.fail();
+                    }
                     break;
-                }
-                if (args.length < 4) {
-                    player.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("argument.pos3d.incomplete")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                try {
-                    runGetHash(sender, player.getWorld().getBlockAt(Integer.parseInt(args[1]),
-                            Integer.parseInt(args[2]), Integer.parseInt(args[3])));
-                } catch (NumberFormatException e) {
-                    player.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                            .append(new TranslatableComponent("parsing.int.expected")).color(ChatColor.RED)
-                            .build());
-                    return true;
-                }
-                break;
 
-            default:
-                sender.spigot().sendMessage(new ComponentBuilder(customPrefixFail)
-                        .append(new TranslatableComponent("commands.help.failed")).color(ChatColor.RED)
-                        .build());
-                break;
+                case "clearitem":
+                    utils.checkPermission("clearItem");
+                    runClearItem(utils.checkPlayer());
+                    break;
+
+                case "gethash":
+                    utils.checkPermission("getHash");
+                    Player player = utils.checkPlayer();
+                    if (args.length == 1) {
+                        runGetHash(player);
+                        break;
+                    }
+                    if (args.length < 4) {
+                        utils.fail("argument.pos3d.incomplete");
+                    }
+                    try {
+                        runGetHash(sender, player.getWorld().getBlockAt(Integer.parseInt(args[1]),
+                                Integer.parseInt(args[2]), Integer.parseInt(args[3])));
+                    } catch (NumberFormatException e) {
+                        utils.fail("parsing.int.expected");
+                    }
+                    break;
+
+                default:
+                    utils.fail();
+            }
+        } catch (Failed e) {
         }
         return true;
     }
@@ -125,10 +109,10 @@ public class App extends JavaPlugin {
         if (sender instanceof Player)
             player = (Player) sender;
 
-        LinkedList<String> autoComplete = new LinkedList<String>();
+        List<String> autoComplete = new LinkedList<String>();
         if (args.length == 1) {
-            if (sender.hasPermission(command.getName() + ".reload")) {
-                autoComplete.add("reload");
+            if (sender.hasPermission(command.getName() + ".config")) {
+                autoComplete.add("config");
             }
             if (sender.hasPermission(command.getName() + ".clearItem")) {
                 autoComplete.add("clearItem");
@@ -138,27 +122,46 @@ public class App extends JavaPlugin {
             }
         }
         if (args.length > 1) {
-            if (args[0].equals("getHash") && player != null && sender.hasPermission(command.getName() + ".getHash")) {
-                Block block = player.getTargetBlockExact(5);
-                if (block != null) {
-                    switch (args.length) {
-                        case 2:
-                            autoComplete.add(block.getX() + "");
-                            autoComplete.add(block.getX() + " " + block.getY());
-                            autoComplete.add(block.getX() + " " + block.getY() + " " + block.getZ());
-                            break;
-                        case 3:
-                            autoComplete.add(block.getY() + "");
-                            autoComplete.add(block.getY() + " " + block.getZ());
-                            break;
-                        case 4:
-                            autoComplete.add(block.getZ() + "");
-                            break;
+            switch (args[0].toLowerCase()) {
+                case "config":
+                    if (!sender.hasPermission(command.getName() + ".config"))
+                        break;
+                    if (args.length == 2) {
+                        autoComplete.add("reload");
+                        autoComplete.add("add");
+                        autoComplete.add("remove");
+                        autoComplete.add("show");
                     }
-                }
+                    break;
+
+                case "gethash":
+                    if (player != null && sender.hasPermission(command.getName() + ".getHash")) {
+                        addTargetBlockToAutoComplete(autoComplete, player, args.length - 2);
+                    }
+                    break;
             }
         }
         return autoComplete;
+    }
+
+    private static void addTargetBlockToAutoComplete(List<String> autoComplete, Player player, int onArg) {
+        Block block = player.getTargetBlockExact(5);
+        if (block == null)
+            return;
+        switch (onArg) {
+            case 0:
+                autoComplete.add(block.getX() + "");
+                autoComplete.add(block.getX() + " " + block.getY());
+                autoComplete.add(block.getX() + " " + block.getY() + " " + block.getZ());
+                break;
+            case 1:
+                autoComplete.add(block.getY() + "");
+                autoComplete.add(block.getY() + " " + block.getZ());
+                break;
+            case 2:
+                autoComplete.add(block.getZ() + "");
+                break;
+        }
     }
 
     public void runReload(CommandSender sender) {

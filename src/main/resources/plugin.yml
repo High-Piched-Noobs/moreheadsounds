@@ -1,6 +1,6 @@
 main: de.thojo0.moreheadsounds.App
 name: MoreHeadSounds
-version: 1.2.1
+version: '${project.version}'
 authors: [thojo0, PYZ]
 description: Allows the use of player heads for minecraft sounds
 api-version: 1.20
@@ -9,8 +9,8 @@ commands:
     description: The main command for MoreHeadSounds
     usage: /<command>
 permissions:
-  moreheadsounds.reload:
-    description: Allows reloading the configuration
+  moreheadsounds.config:
+    description: Allows changing the configuration
   moreheadsounds.clearItem:
     description: Allows clearing the sound of the currently holding player head
     default: true
