@@ -3,8 +3,11 @@ package de.thojo0.moreheadsounds;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Instrument;
 import org.bukkit.Material;
@@ -27,7 +30,7 @@ import org.bukkit.profile.PlayerProfile;
 
 public class EventListener implements Listener {
     // Mapping from texture hashes to lists of NamespacedKeys for sounds
-    private final Map<String, ArrayList<NamespacedKey>> textureToSounds = new HashMap<>();
+    private final Map<String, List<NamespacedKey>> textureToSounds = new HashMap<>();
 
     EventListener(FileConfiguration config) {
         reloadConfig(config);
@@ -42,46 +45,66 @@ public class EventListener implements Listener {
         textureToSounds.clear();
         // Get all configuration values
         final Map<String, Object> configValues = config.getValues(false);
-        // Iterate over all available sounds
-        for (Sound sound : Sound.values()) {
-            // Get the NamespacedKey for the current sound
-            NamespacedKey soundKey = sound.getKey();
-            // Iterate over the configuration values
-            configValues.forEach((textureHash, c) -> {
-                // Get the list of excluded sounds for the current texture
-                final List<String> exclude = ((ConfigurationSection) c).getStringList("exclude");
-                for (String ex : exclude) {
-                    // Split the exclude string into namespace and key
-                    String[] splitEx = ex.split(":");
-                    String namespace = NamespacedKey.MINECRAFT;
-                    String excludeKey = splitEx[0];
-                    if (splitEx.length > 1) {
-                        namespace = splitEx[0];
-                        excludeKey = splitEx[1];
-                    }
-                    // Skip the sound if it is in the exclude list
-                    if (namespace.equals(soundKey.getNamespace()) && soundKey.getKey().startsWith(excludeKey))
-                        return;
-                }
-                // Get the list of included sounds for the current texture
-                final List<String> include = ((ConfigurationSection) c).getStringList("include");
-                for (String in : include) {
-                    // Split the include string into namespace and key
-                    String[] splitIn = in.split(":");
-                    String namespace = NamespacedKey.MINECRAFT;
-                    String includeKey = splitIn[0];
-                    if (splitIn.length > 1) {
-                        namespace = splitIn[0];
-                        includeKey = splitIn[1];
-                    }
-                    // Add the sound to the textureToSounds map if it is in the include list
-                    if (namespace.equals(soundKey.getNamespace()) && soundKey.getKey().startsWith(includeKey)) {
-                        textureToSounds.computeIfAbsent(textureHash, k -> new ArrayList<>()).add(soundKey);
-                        return;
+
+        // Iterate over each texture hash configuration
+        configValues.forEach((textureHash, c) -> {
+            if (!(c instanceof ConfigurationSection)) {
+                return;
+            }
+            ConfigurationSection section = (ConfigurationSection) c;
+            final List<String> include = section.getStringList("include");
+            final List<String> exclude = section.getStringList("exclude");
+
+            Set<NamespacedKey> sounds = new TreeSet<>();
+
+            // 1. include: endsWith(".")
+            for (String entry : include) {
+                if (entry.endsWith(".")) {
+                    String pattern = entry.substring(0, entry.length());
+                    NamespacedKey key = NamespacedKey.fromString(pattern);
+                    for (Sound sound : Sound.values()) {
+                        if (sound.getKey().getNamespace().equals(key.getNamespace())
+                                && sound.getKey().getKey().startsWith(key.getKey())) {
+                            sounds.add(sound.getKey());
+                        }
                     }
                 }
-            });
-        }
+            }
+
+            // 2. exclude: endsWith(".")
+            Set<NamespacedKey> toRemoveCategories = new HashSet<>();
+            for (String entry : exclude) {
+                if (entry.endsWith(".")) {
+                    String pattern = entry.substring(0, entry.length());
+                    NamespacedKey key = NamespacedKey.fromString(pattern);
+                    for (NamespacedKey soundKey : sounds) {
+                        if (soundKey.getNamespace().equals(key.getNamespace())
+                                && soundKey.getKey().startsWith(key.getKey())) {
+                            toRemoveCategories.add(soundKey);
+                        }
+                    }
+                }
+            }
+            sounds.removeAll(toRemoveCategories);
+
+            // 3. include: not endsWith(".")
+            for (String entry : include) {
+                if (!entry.endsWith(".")) {
+                    sounds.add(NamespacedKey.fromString(entry));
+                }
+            }
+
+            // 4. exclude: not endsWith(".")
+            for (String entry : exclude) {
+                if (!entry.endsWith(".")) {
+                    sounds.remove(NamespacedKey.fromString(entry));
+                }
+            }
+
+            if (!sounds.isEmpty()) {
+                textureToSounds.put(textureHash, new ArrayList<>(sounds));
+            }
+        });
     }
 
     @SuppressWarnings("deprecation") // Suppress warning for deprecated method getId()
@@ -140,6 +163,10 @@ public class EventListener implements Listener {
                 item.getItemStack().setItemMeta(metaData);
             }
         }
+    }
+
+    public List<NamespacedKey> getSounds(String textureHash) {
+        return textureToSounds.get(textureHash);
     }
 
     // Extracts the texture hash from the player head's skin URL

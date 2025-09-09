@@ -381,6 +381,17 @@ public class App extends JavaPlugin {
                 player.sendMessage("    §8- §r" + key);
             }
         }
+        List<NamespacedKey> activeSounds = eventListener.getSounds(hash);
+        player.sendMessage("  §bActive sounds:");
+        if (activeSounds == null || activeSounds.isEmpty()) {
+            player.sendMessage("    §7(empty)");
+        } else {
+            for (int i = 0; i < activeSounds.size(); i++) {
+                NamespacedKey key = activeSounds.get(i);
+                String colorCode = (i < 25) ? "§r" : "§7"; // §r for reset (white), §7 for gray
+                player.sendMessage("    " + i + ". " + colorCode + key.toString());
+            }
+        }
     }
 
     public void runList(CommandSender sender, int page) {
